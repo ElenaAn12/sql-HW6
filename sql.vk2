@@ -1,0 +1,64 @@
+use vk2;
+-- ----------------------------------------------------------------------
+-- 1.
+-- Пусть задан некоторый пользователь. Из всех пользователей соц.сети найдите человека, 
+-- который больше всех общался с выбранным пользователем.
+
+-- SELECT 
+--     from_user_id AS from_Xid_to23, -- выбираем пользователя который писал 23му
+--     COUNT(*) AS count_to23_fromXid, -- считаем, сколько сообщений Х отправил 23му
+--     (SELECT 
+--             COUNT(*)
+--         FROM
+--             messages
+--         WHERE
+--             from_user_id = 23
+--         GROUP BY to_user_id
+--         ORDER BY COUNT(*) DESC
+--         LIMIT 1) AS from23_to_Xid,  -- считаем, кому больше всего писал 23й
+--         
+--         (SELECT 
+--             COUNT(*)
+--         FROM
+--             messages
+--         WHERE
+--             from_user_id = 23
+--         GROUP BY to_user_id
+--         ORDER BY COUNT(*) DESC
+--         LIMIT 1) AS count_from23 -- сколько соощений отправил 23й -> Х
+-- FROM
+--     messages
+-- WHERE
+--     to_user_id = 23
+-- GROUP BY from_user_id 
+-- order by count_to23_fromXid desc limit 1;
+-- ----------------------------------------------------------------------------------------------- 
+-- 2. 
+-- Подсчитать общее количество лайков, которые получили пользователи младше 10 лет
+
+select count(*) as likes, (SELECT TIMESTAMPDIFF (YEAR, birthday, CURDATE())) as age from profiles
+join likes on
+profiles.user_id = likes.user_id -- выбираем только тех пользователей которые оставляли лайки
+where (YEAR(current_time) - YEAR(birthday)) < 10 -- выбираем пользователей до 10 лет
+GROUP BY age
+ORDER BY likes desc; -- все лайки пользователей до 10 лет, без общей суммы
+
+-- -------------------------------------------------------------------------------
+
+-- 3.
+-- Определить кто больше поставил лайков (всего): мужчины или женщины.
+
+-- select count(*), gender from profiles -- считаем сколько всего М и Ж
+-- join likes on
+-- profiles.user_id = likes.user_id -- выбираем пользователейй которые ставили лайки
+-- where (YEAR(current_time) - YEAR(birthday)) > 18 -- отсеиваем всех старше 18 лет
+-- group by gender -- группируем по гендерному признаку
+-- ORDER BY count(*) desc -- сортировка в порядке убывания
+-- limit 1; -- вывести только первую строку/кто больше поставил лайков
+
+
+
+
+
+
+   
